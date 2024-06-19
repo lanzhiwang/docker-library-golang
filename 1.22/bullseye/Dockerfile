@@ -225,13 +225,58 @@ RUN set -eux; \
 # + [ 1717097167 = 1717097167 ]
 # + find /target -newer /target/usr/local/go -exec sh -c ls -ld "$@" && exit "$#" -- {} +
 
-RUN env
+# RUN env
+# HOME=/root
+# PATH=/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# GOLANG_VERSION=1.22.4
 
-RUN go env
+# RUN go env
+# GO111MODULE=''
+# GOARCH='amd64'
+# GOBIN=''
+# GOCACHE='/root/.cache/go-build'
+# GOENV='/root/.config/go/env'
+# GOEXE=''
+# GOEXPERIMENT=''
+# GOFLAGS=''
+# GOHOSTARCH='amd64'
+# GOHOSTOS='linux'
+# GOINSECURE=''
+# GOMODCACHE='/root/go/pkg/mod'
+# GONOPROXY=''
+# GONOSUMDB=''
+# GOOS='linux'
+# GOPATH='/root/go'
+# GOPRIVATE=''
+# GOPROXY='https://proxy.golang.org,direct'
+# GOROOT='/target/usr/local/go'
+# GOSUMDB='sum.golang.org'
+# GOTMPDIR=''
+# GOTOOLCHAIN='auto'
+# GOTOOLDIR='/target/usr/local/go/pkg/tool/linux_amd64'
+# GOVCS=''
+# GOVERSION='go1.22.4'
+# GCCGO='gccgo'
+# GOAMD64='v1'
+# AR='ar'
+# CC='gcc'
+# CXX='g++'
+# CGO_ENABLED='0'
+# GOMOD='/dev/null'
+# GOWORK=''
+# CGO_CFLAGS='-O2 -g'
+# CGO_CPPFLAGS=''
+# CGO_CXXFLAGS='-O2 -g'
+# CGO_FFLAGS='-O2 -g'
+# CGO_LDFLAGS='-O2 -g'
+# PKG_CONFIG='pkg-config'
+# GOGCCFLAGS='-fPIC -m64 -fno-caret-diagnostics -Qunused-arguments -Wl,--no-gc-sections -fmessage-length=0 -ffile-prefix-map=/tmp/go-build1264702358=/tmp/go-build -gno-record-gcc-switches'
 
 FROM buildpack-deps:bullseye-scm
 
 RUN env
+# HOME=/root
+# PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # install cgo-related dependencies
 RUN set -eux; \
@@ -260,22 +305,50 @@ ENV GOTOOLCHAIN=local
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
-RUN env
+# RUN env
+# HOME=/root
+# GOTOOLCHAIN=local
+# PATH=/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# GOPATH=/go
+# GOLANG_VERSION=1.22.4
 
-RUN tree -L 1 /
+# RUN tree -L 1 /
+# RUN tree -L 1 /
+# /
+# |-- bin
+# |-- boot
+# |-- dev
+# |-- etc
+# |-- home
+# |-- lib
+# |-- lib64
+# |-- media
+# |-- mnt
+# |-- opt
+# |-- proc
+# |-- root
+# |-- run
+# |-- sbin
+# |-- srv
+# |-- sys
+# |-- tmp
+# |-- usr
+# |-- var
+
+# 19 directories, 0 files
 
 # (see notes above about "COPY --link")
 COPY --from=build --link /target/ /
 # [stage-1 3/5] COPY --from=build --link /target/ /
 
-RUN tree -L 1 /
-
-RUN tree -L 1 /target
+RUN tree -L 1 /usr/local/go
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 1777 "$GOPATH"
 # [stage-1 4/5] RUN mkdir -p "/go/src" "/go/bin" && chmod -R 1777 "/go"
 
 RUN tree -L 1 /go
+
+RUN go env
 
 WORKDIR $GOPATH
 # [stage-1 5/5] WORKDIR /go
